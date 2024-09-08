@@ -200,6 +200,8 @@ def check_for_win(block_flag, screen):
             else:
                 pygame.draw.line(screen, "white", (335, 226), (25 , 546), 3)
                 return 2
+        elif(all(values!=0 for values in block_flag.values())):
+            return 3
         else:
             return 0
             
@@ -261,7 +263,7 @@ def main():
     pygame.init()
 
     x = 370
-    y = 570
+    y = 650
     y_extra = 202
     screen = pygame.display.set_mode((x,y))
     
@@ -279,11 +281,14 @@ def main():
     clock = pygame.time.Clock()
     running = True
     menu = True
+    reset = False
     
     while(menu):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 menu = False
+        
+        temp = pygame.font.Font(None, 25)
         
         heading_font = pygame.font.Font(None, 100)
         screen.fill("black")
@@ -293,6 +298,8 @@ def main():
         screen.blit(heading, (120, 50))
         heading = heading_font.render("Toe", False, "red")
         screen.blit(heading, (240, 50))
+        text = temp.render("Enter name in blank and press Enter.", True, 'white')
+        screen.blit(text, (33, 150))
         
         pygame.display.flip()
         player1 = text_input(screen, player1, "red", 130, 200, 85, 240)
@@ -306,7 +313,10 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         
+        reset = False
+        
         screen.fill("black")
+        temp = pygame.font.Font(None, 30)
         
         if (check_for_win(block_flag, screen) == 0 and win == False):
             if turn == 1:
@@ -349,17 +359,27 @@ def main():
             screen.blit(player1_text, (25, 25))
             screen.blit(player2_text, (25, 95))
             
-            temp = pygame.font.Font(None, 20)
             screen.blit(temp.render("Press ESC to close.", True, 'white'), (25, 150))
+            
+            reset_button = pygame.Rect(260 , 580, 73, 30)
+            pygame.draw.rect(screen, 'white', reset_button)
+            screen.blit(temp.render("Reset", True, 'black'), (270, 585))
             
             pygame.display.flip()
             
-            while(win == False):
+            while(win == False and reset == False):
                 for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if reset_button.collidepoint(event.pos):
+                            print("Resetting")
+                            block_flag = {"block_1":0, "block_2":0, "block_3":0, "block_4":0, "block_5":0, "block_6":0, "block_7":0, "block_8":0, "block_9":0 }
+                            turn = 1
+                            reset = True
                     if event.type == pygame.KEYDOWN or event.type == pygame.QUIT:
                         if event.key == pygame.K_ESCAPE or event.type == pygame.QUIT:
                             win = True
                             break
+                    
                 
         elif(check_for_win(block_flag, screen) == 2 and win == False):
             draw_grid(screen, x, y, y_extra, line_length, line_width, padding)
@@ -371,18 +391,57 @@ def main():
             screen.blit(player1_text, (25, 25))
             screen.blit(player2_text, (25, 95))
             
-            temp = pygame.font.Font(None, 20)
             screen.blit(temp.render("Press ESC to close.", True, 'white'), (25, 150))
             
+            reset_button = pygame.Rect(260 , 580, 73, 30)
+            pygame.draw.rect(screen, 'white', reset_button)
+            screen.blit(temp.render("Reset", True, 'black'), (270, 585))
+            
             pygame.display.flip()
-            while(win == False):
+            while(win == False and reset == False):
                 for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if reset_button.collidepoint(event.pos):
+                            print("Resetting")
+                            block_flag = {"block_1":0, "block_2":0, "block_3":0, "block_4":0, "block_5":0, "block_6":0, "block_7":0, "block_8":0, "block_9":0 }
+                            turn = 1
+                            reset = True
                     if event.type == pygame.KEYDOWN or event.type == pygame.QUIT:
                         if event.key == pygame.K_ESCAPE or event.type == pygame.QUIT:
                             win = True
                             break
             
             
+        elif(check_for_win(block_flag, screen) == 3 and win == False):
+            draw_grid(screen, x, y, y_extra, line_length, line_width, padding)
+            draw_crosses_circles(block_flag,screen)
+            
+            print("draw in both players")
+            player1_text = font.render(player1 + "     Draw", True, 'white', None)
+            player2_text = font.render(player2 + "     Draw", True, 'white', None)
+            screen.blit(player1_text, (25, 25))
+            screen.blit(player2_text, (25, 95))
+            
+            screen.blit(temp.render("Press ESC to close.", True, 'white'), (25, 150))
+            
+            reset_button = pygame.Rect(260 , 580, 73, 30)
+            pygame.draw.rect(screen, 'white', reset_button)
+            screen.blit(temp.render("Reset", True, 'black'), (270, 585))
+            
+            pygame.display.flip()
+            while(win == False and reset == False):
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if reset_button.collidepoint(event.pos):
+                            print("Resetting")
+                            block_flag = {"block_1":0, "block_2":0, "block_3":0, "block_4":0, "block_5":0, "block_6":0, "block_7":0, "block_8":0, "block_9":0 }
+                            turn = 1
+                            reset = True
+                    if event.type == pygame.KEYDOWN or event.type == pygame.QUIT:
+                        if event.key == pygame.K_ESCAPE or event.type == pygame.QUIT:
+                            win = True
+                            break
+        
         else:
             running = False
             break        

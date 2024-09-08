@@ -1,0 +1,6 @@
+# Ignore all .spec files
+*.spec
+
+# Ignore all build directories for Tic-Tac-Toe_with_pygames and Tic-Tac-Toe_with_tkinter
+Tic-Tac-Toe_with_pygames/build/
+Tic-Tac-Toe_with_tkinter/build/
