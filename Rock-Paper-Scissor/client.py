@@ -1,7 +1,5 @@
 import pygame
 from network import Network
-from game import Game
-import pickle
 
 pygame.font.init()
 
